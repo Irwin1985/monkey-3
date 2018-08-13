@@ -3,12 +3,12 @@ go:
   - "1.10"
 
 install:
-  - go get -v github.com/golang/lint/golint
+  - go get github.com/golang/lint/golint
   - go get golang.org/x/tools/cmd/cover
   - go get github.com/mattn/goveralls
 
 script: 
   - golint -set_exit_status $(go list ./... | grep -v /vendor/)     
   - go vet ./...
-  - go test ./... -v -race -covermode=atomic -coverprofile=coverage.out
-  - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
+  - go test ./... -race -cover -coverprofile=coverage.out
+  - goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
