@@ -8,7 +8,6 @@ install:
   - go get github.com/mattn/goveralls
 
 script: 
-  - golint -set_exit_status $(go list ./... | grep -v /vendor/)     
-  - go vet ./...
+  - make lint
   - go test ./... -race -cover -coverprofile=coverage.out
   - goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN

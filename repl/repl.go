@@ -12,6 +12,7 @@ import (
 // PROMPT is a prompt string.
 const PROMPT = ">> "
 
+// Start starts repl mode.
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
 	for {
