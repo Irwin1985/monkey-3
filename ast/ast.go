@@ -1,10 +1,15 @@
 package ast
 
-import "github.com/gcoka/monkey/token"
+import (
+	"bytes"
+
+	"github.com/gcoka/monkey/token"
+)
 
 // Node is a node of AST.
 type Node interface {
 	TokenLiteral() string
+	String() string
 }
 
 // Statement is a statement.
@@ -21,6 +26,7 @@ type Expression interface {
 
 // Program is a root node of AST.
 type Program struct {
+	Node
 	Statements []Statement
 }
 
@@ -30,6 +36,16 @@ func (p *Program) TokenLiteral() string {
 		return p.Statements[0].TokenLiteral()
 	}
 	return ""
+}
+
+func (p *Program) String() string {
+	var out bytes.Buffer
+
+	for _, s := range p.Statements {
+		out.WriteString(s.String())
+	}
+
+	return out.String()
 }
 
 // LetStatement is a let statement.
@@ -44,6 +60,20 @@ func (ls *LetStatement) statementNode() {}
 // TokenLiteral returns let statement token literal.
 func (ls *LetStatement) TokenLiteral() string { return ls.Token.Literal }
 
+func (ls *LetStatement) String() string {
+	var out bytes.Buffer
+
+	out.WriteString(ls.TokenLiteral() + " ")
+	out.WriteString(ls.Name.String())
+	out.WriteString(" = ")
+
+	if ls.Value != nil {
+		out.WriteString(ls.Value.String())
+	}
+	out.WriteString(";")
+	return out.String()
+}
+
 // Identifier is an identifier.
 type Identifier struct {
 	Token token.Token // token.IDENT
@@ -55,6 +85,10 @@ func (i *Identifier) expressionNode() {}
 // TokenLiteral returns identifier token literal.
 func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
 
+func (i *Identifier) String() string {
+	return i.Value
+}
+
 // ReturnStatement is a return statement.
 type ReturnStatement struct {
 	Token       token.Token // token.RETURN
@@ -65,3 +99,32 @@ func (rs *ReturnStatement) statementNode() {}
 
 // TokenLiteral returns return statement token literal.
 func (rs *ReturnStatement) TokenLiteral() string { return rs.Token.Literal }
+
+func (rs *ReturnStatement) String() string {
+	var out bytes.Buffer
+	out.WriteString(rs.TokenLiteral() + " ")
+	if rs.ReturnValue != nil {
+		out.WriteString(rs.ReturnValue.String())
+	}
+	out.WriteString(";")
+	return out.String()
+}
+
+// ExpressionStatement is an expression statement.
+type ExpressionStatement struct {
+	Token      token.Token // expression's first token
+	Expression Expression
+}
+
+func (es *ExpressionStatement) statementNode() {}
+
+// TokenLiteral returns expression statement token literal.
+func (es *ExpressionStatement) TokenLiteral() string { return es.Token.Literal }
+
+func (es *ExpressionStatement) String() string {
+	if es.Expression != nil {
+		return es.Expression.String()
+	}
+
+	return ""
+}
