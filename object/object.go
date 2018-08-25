@@ -2,6 +2,7 @@ package object
 
 import "fmt"
 
+// Object type internal string expression.
 const (
 	NullObject    = "NULL"
 	IntegerObject = "INTEGER"
