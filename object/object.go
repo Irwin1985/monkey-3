@@ -3,9 +3,9 @@ package object
 import "fmt"
 
 const (
-	nullObject    = "NULL"
-	integerObject = "INTEGER"
-	booleanObject = "BOOLEAN"
+	NullObject    = "NULL"
+	IntegerObject = "INTEGER"
+	BooleanObject = "BOOLEAN"
 )
 
 // Type is object Type
@@ -24,9 +24,9 @@ type Null struct{}
 func (n *Null) Inspect() string { return "null" }
 
 // Type returns object's type.
-func (n *Null) Type() Type { return nullObject }
+func (n *Null) Type() Type { return NullObject }
 
-// Integer is an integer value object.
+// Integer is an integer value objectB
 type Integer struct {
 	Value int64
 }
@@ -35,7 +35,7 @@ type Integer struct {
 func (i *Integer) Inspect() string { return fmt.Sprintf("%d", i.Value) }
 
 // Type returns object's type.
-func (i *Integer) Type() Type { return integerObject }
+func (i *Integer) Type() Type { return IntegerObject }
 
 // Boolean is a boolean value object.
 type Boolean struct {
@@ -46,4 +46,4 @@ type Boolean struct {
 func (b *Boolean) Inspect() string { return fmt.Sprintf("%t", b.Value) }
 
 // Type returns object's type.
-func (b *Boolean) Type() Type { return booleanObject }
+func (b *Boolean) Type() Type { return BooleanObject }
