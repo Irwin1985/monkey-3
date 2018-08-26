@@ -4,9 +4,10 @@ import "fmt"
 
 // Object type internal string expression.
 const (
-	NullObject    = "NULL"
-	IntegerObject = "INTEGER"
-	BooleanObject = "BOOLEAN"
+	NullObject        = "NULL"
+	IntegerObject     = "INTEGER"
+	BooleanObject     = "BOOLEAN"
+	ReturnValueObject = "RETURN_VALUE"
 )
 
 // Type is object Type
@@ -48,3 +49,14 @@ func (b *Boolean) Inspect() string { return fmt.Sprintf("%t", b.Value) }
 
 // Type returns object's type.
 func (b *Boolean) Type() Type { return BooleanObject }
+
+// ReturnValue is a return value object.
+type ReturnValue struct {
+	Value Object
+}
+
+// Inspect returns wrapped object's value.
+func (rv *ReturnValue) Inspect() string { return rv.Value.Inspect() }
+
+// Type returns object's type.
+func (rv *ReturnValue) Type() Type { return ReturnValueObject }
