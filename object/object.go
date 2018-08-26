@@ -4,6 +4,7 @@ import "fmt"
 
 // Object type internal string expression.
 const (
+	ErrorObject       = "ERROR"
 	NullObject        = "NULL"
 	IntegerObject     = "INTEGER"
 	BooleanObject     = "BOOLEAN"
@@ -60,3 +61,14 @@ func (rv *ReturnValue) Inspect() string { return rv.Value.Inspect() }
 
 // Type returns object's type.
 func (rv *ReturnValue) Type() Type { return ReturnValueObject }
+
+// Error is an error object.
+type Error struct {
+	Message string
+}
+
+// Type returns error type.
+func (e *Error) Type() Type { return ErrorObject }
+
+// Inspect returns error value.
+func (e *Error) Inspect() string { return "ERROR: " + e.Message }
