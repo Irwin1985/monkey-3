@@ -1,5 +1,12 @@
 package object
 
+// NewEnclosedEnvironment initializes an environment with outer environment.
+func NewEnclosedEnvironment(outer *Environment) *Environment {
+	env := NewEnvironment()
+	env.outer = outer
+	return env
+}
+
 // NewEnvironment initializes an environment.
 func NewEnvironment() *Environment {
 	s := make(map[string]Object)
@@ -9,11 +16,15 @@ func NewEnvironment() *Environment {
 // Environment is a scope environment.
 type Environment struct {
 	store map[string]Object
+	outer *Environment
 }
 
 // Get returns identifier object.
 func (e *Environment) Get(name string) (Object, bool) {
 	obj, ok := e.store[name]
+	if !ok && e.outer != nil {
+		obj, ok = e.outer.Get(name)
+	}
 	return obj, ok
 }
 
