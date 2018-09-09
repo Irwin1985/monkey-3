@@ -18,6 +18,7 @@ const (
 	FunctionObject    = "FUNCTION"
 	StringObject      = "STRING"
 	BuiltinObject     = "BUILTIN"
+	ArrayObject       = "ARRAY"
 )
 
 // Type is object Type
@@ -134,3 +135,26 @@ func (b *Builtin) Type() Type { return BuiltinObject }
 
 // Inspect returns object's value.
 func (b *Builtin) Inspect() string { return "builtin function" }
+
+// Array is an array object.
+type Array struct {
+	Elements []Object
+}
+
+// Type returns object's type.
+func (ao *Array) Type() Type { return ArrayObject }
+
+// Inspect returns object's value.
+func (ao *Array) Inspect() string {
+	var out bytes.Buffer
+
+	elements := []string{}
+	for _, e := range ao.Elements {
+		elements = append(elements, e.Inspect())
+	}
+
+	out.WriteString("[")
+	out.WriteString(strings.Join(elements, ", "))
+	out.WriteString("]")
+	return out.String()
+}
