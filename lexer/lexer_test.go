@@ -103,7 +103,10 @@ func TestNextToken2Char(t *testing.T) {
 	input := `
 	10 == 10
 	10 != 9
-	=`
+	=
+	"foobar"
+	"foo bar"
+	`
 
 	tests := []expectedToken{
 		{token.INT, "10"},
@@ -113,6 +116,8 @@ func TestNextToken2Char(t *testing.T) {
 		{token.NEQ, "!="},
 		{token.INT, "9"},
 		{token.ASSIGN, "="},
+		{token.STRING, "foobar"},
+		{token.STRING, "foo bar"},
 		{token.EOF, ""},
 	}
 

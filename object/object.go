@@ -16,6 +16,7 @@ const (
 	BooleanObject     = "BOOLEAN"
 	ReturnValueObject = "RETURN_VALUE"
 	FunctionObject    = "FUNCTION"
+	StringObject      = "STRING"
 )
 
 // Type is object Type
@@ -107,3 +108,14 @@ func (f *Function) Inspect() string {
 
 	return out.String()
 }
+
+// String is a string value object.
+type String struct {
+	Value string
+}
+
+// Inspect returns object's value.
+func (s *String) Inspect() string { return s.Value }
+
+// Type returns object's type.
+func (s *String) Type() Type { return StringObject }
