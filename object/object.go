@@ -17,6 +17,7 @@ const (
 	ReturnValueObject = "RETURN_VALUE"
 	FunctionObject    = "FUNCTION"
 	StringObject      = "STRING"
+	BuiltinObject     = "BUILTIN"
 )
 
 // Type is object Type
@@ -27,6 +28,9 @@ type Object interface {
 	Type() Type
 	Inspect() string
 }
+
+// BuiltinFunction is builtin function.
+type BuiltinFunction func(args ...Object) Object
 
 // Null is a null value object.
 type Null struct{}
@@ -119,3 +123,14 @@ func (s *String) Inspect() string { return s.Value }
 
 // Type returns object's type.
 func (s *String) Type() Type { return StringObject }
+
+// Builtin is a builtin function object.
+type Builtin struct {
+	Fn BuiltinFunction
+}
+
+// Type returns object's type.
+func (b *Builtin) Type() Type { return BuiltinObject }
+
+// Inspect returns object's value.
+func (b *Builtin) Inspect() string { return "builtin function" }
