@@ -61,6 +61,27 @@ func testIntegerObject(t *testing.T, obj object.Object, expected int64) bool {
 	return true
 }
 
+func testIntegerArrayObject(t *testing.T, obj object.Object, expected []int64) bool {
+	result, ok := obj.(*object.Array)
+	if !ok {
+		t.Errorf("object in not Array. got=%T (%+v)", obj, obj)
+		return false
+	}
+
+	if len(result.Elements) != len(expected) {
+		t.Errorf("object has wrong length. got=%d, want=%d", len(result.Elements), len(expected))
+		return false
+	}
+
+	for i, v := range result.Elements {
+		if !testIntegerObject(t, v, expected[i]) {
+			return false
+		}
+	}
+
+	return true
+}
+
 func TestEvalBooleanExpression(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -338,6 +359,11 @@ func TestBuiltinFunction(t *testing.T) {
 		{`last([])`, nil},
 		{`last([1, 2], [3, 4])`, "wrong number of arguments. got=2, want=1"},
 		{`last(1)`, "argument to `last` must be ARRAY, got INTEGER"},
+		{`rest([1, 2, 3])`, []int64{2, 3}},
+		{`rest([1])`, []int64{}},
+		{`rest(rest([1]))`, nil},
+		{`rest([1, 2], [3, 4])`, "wrong number of arguments. got=2, want=1"},
+		{`rest(1)`, "argument to `rest` must be ARRAY, got INTEGER"},
 	}
 
 	for _, tt := range tests {
@@ -356,6 +382,8 @@ func TestBuiltinFunction(t *testing.T) {
 			if errObj.Message != expected {
 				t.Errorf("wrong error message. expected=%q, got=%q", expected, errObj.Message)
 			}
+		case []int64:
+			testIntegerArrayObject(t, evaluated, expected)
 		case nil:
 			testNullObject(t, evaluated)
 		}
