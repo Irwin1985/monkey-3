@@ -460,3 +460,25 @@ func TestArrayIndexExpression(t *testing.T) {
 		}
 	}
 }
+
+func ExamplePuts_Integer() {
+	input := `puts(1)`
+	testEval(input)
+	// Output: 1
+}
+
+func ExamplePuts_String() {
+	input := `puts("hello monkey")`
+	testEval(input)
+	// Output: hello monkey
+}
+
+func ExamplePuts_MultipleValues() {
+	input := `puts(1, 3 * 4, "hello" + " " + "monkey", [2, "monkey"])`
+	testEval(input)
+	// Output:
+	// 1
+	// 12
+	// hello monkey
+	// [2, monkey]
+}
