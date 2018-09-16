@@ -5,3 +5,13 @@ lint:
 .PHONY: test
 test:
 	go test ./... -race -cover
+
+build:
+	go build ./cmd/monkey
+
+install:
+	go install ./cmd/monkey
+
+clean:
+	rm -f monkey
+	go clean
